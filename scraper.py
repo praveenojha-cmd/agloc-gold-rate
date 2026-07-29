@@ -1,23 +1,25 @@
-import requests
+from playwright.sync_api import sync_playwright
 
-url = "https://www.agloc.org/"
+URL = "https://www.agloc.org/"
 
-headers = {
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
-}
+with sync_playwright() as p:
+    browser = p.chromium.launch(
+        headless=True
+    )
 
-print("=" * 80)
-print("AGLOC SCRAPER STARTED")
-print("=" * 80)
+    page = browser.new_page(
+        viewport={"width": 1600, "height": 900}
+    )
 
-response = requests.get(url, headers=headers, timeout=30)
+    print("Opening website...")
 
-print("Status Code:", response.status_code)
-print("Content Length:", len(response.text))
+    page.goto(URL, wait_until="networkidle", timeout=60000)
 
-with open("output.html", "w", encoding="utf-8") as f:
-    f.write(response.text)
+    page.screenshot(
+        path="agloc.png",
+        full_page=True
+    )
 
-print("output.html saved successfully")
-print("=" * 80)
-print("SCRAPER COMPLETED")
+    print("Screenshot saved.")
+
+    browser.close()
