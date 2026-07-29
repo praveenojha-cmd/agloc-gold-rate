@@ -1,4 +1,9 @@
 import requests
+import sys
+
+print("=" * 80)
+print("AGLOC SCRAPER STARTED")
+print("=" * 80)
 
 url = "https://www.agloc.org/"
 
@@ -9,13 +14,20 @@ headers = {
 }
 
 try:
+    print(f"Fetching: {url}")
+
     response = requests.get(url, headers=headers, timeout=30)
 
-    print("=" * 60)
-    print("Status Code:", response.status_code)
-    print("=" * 60)
+    print(f"Status Code: {response.status_code}")
+    print(f"Content Length: {len(response.text)}")
+
+    print("=" * 80)
     print(response.text[:1000])
-    print("=" * 60)
+    print("=" * 80)
 
 except Exception as e:
+    print("ERROR:")
     print(e)
+    sys.exit(1)
+
+print("SCRAPER COMPLETED")
