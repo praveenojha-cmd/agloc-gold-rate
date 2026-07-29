@@ -19,35 +19,20 @@ jobs:
       - name: Upgrade pip
         run: python -m pip install --upgrade pip
 
-      - name: Show Repository Files
-        run: |
-          pwd
-          ls -la
-
       - name: Install requirements
         run: |
           pip install -r requirements.txt
 
-      - name: Verify installation
+      - name: Install Playwright Browser
         run: |
-          python -c "import requests; print('Requests version:', requests.__version__)"
+          playwright install chromium
 
-      - name: Run scraper
+      - name: Run Browser
         run: |
-          python -u scraper.py
+          python scraper.py
 
-      - name: Verify output file
-        run: |
-          ls -lh
-          if [ -f output.html ]; then
-            echo "✅ output.html found"
-          else
-            echo "❌ output.html NOT found"
-            exit 1
-          fi
-
-      - name: Upload HTML Artifact
+      - name: Upload Screenshot
         uses: actions/upload-artifact@v4
         with:
-          name: agloc-output
-          path: output.html
+          name: agloc-screenshot
+          path: agloc.png
