@@ -30,8 +30,24 @@ jobs:
 
       - name: Verify installation
         run: |
-          python -c "import requests; print(requests.__version__)"
+          python -c "import requests; print('Requests version:', requests.__version__)"
 
       - name: Run scraper
         run: |
           python -u scraper.py
+
+      - name: Verify output file
+        run: |
+          ls -lh
+          if [ -f output.html ]; then
+            echo "✅ output.html found"
+          else
+            echo "❌ output.html NOT found"
+            exit 1
+          fi
+
+      - name: Upload HTML Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: agloc-output
+          path: output.html
